@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">mobile-test</string>
+
+    // page contact
+    <string name="contacts_title">Contatos</string>
+
+    // page information
+    <string name="information_title">Transferir</string>
+    <string name="money_hint">R$ 0,00</string>
+    <string name="transfer">TRANSFERIR</string>
+    <string name="current">Corrente</string>
+    <string name="savings">Poupança</string>
+</resources>
