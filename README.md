@@ -98,12 +98,12 @@ fun fakeContacts():MutableList<Contact> = mutableListOf(
 ### Criação das telas
 O aplicativo possui no total 2 telas.
 - **activity_contatos**
-talvez a tela mais complexa, pois reune todos os dados no viewHolder da RecyclerView,ainda temos que organizar por nome cada novo contato adicionado. Complicando um pouco do processo de organização das posições e dos dados na recyclerview.
+essa activity reune todos os dados no viewHolder da RecyclerView, ainda temos que organizar por nome cada novo contato adicionado. Complicando um pouco do processo de organização das posições e dos dados na recyclerview.
 
-<img src= "https://user-images.githubusercontent.com/43412432/62231771-14190e80-b39b-11e9-8c59-41ae58fb06c8.png" height="400" width="250">
+<img src= "https://user-images.githubusercontent.com/43412432/62231771-14190e80-b39b-11e9-8c59-41ae58fb06c8.png" height="400" width="250" hspace="50">
 
 - **activity_information_contact**
 essa tela é util para confirmar alguns dados de cada usuario especifico, como o número da conta e para qual banco esta sendo enviado.
 nesta tela também será possivel escolher a quantia que será depositada, ao clicar no botão "depositar", aparacerá uma mensagem de confirmação do processo.
 
-<img src= "https://user-images.githubusercontent.com/43412432/62232686-314edc80-b39d-11e9-96c6-8414412b5835.png" height="400" width="250">
+<img src= "https://user-images.githubusercontent.com/43412432/62232686-314edc80-b39d-11e9-96c6-8414412b5835.png" height="400" width="250" hspace="50">
