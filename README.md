@@ -1,7 +1,7 @@
 # kotlin-mobile-test
 
 Este aplicativo foi desenvolvido com manipulação de dados em memoria com o objetivo de realizar uma 
-simulação de dados bancários divididos em conta corrente e conta poupança, nestes dois casos, será possivel transeferir valores em R$ 
+simulação de dados bancários divididos em conta corrente e conta poupança, nestes dois casos, será possivel transferir valores em R$ 
 de sua conta para conta de algum contato adicionado, por motivos de testes de inteface e manipulação mais dinamica dos dados, adicionei
 dados fakes de contatos, como nome, numero da conta, nome do banco e etc.
 
@@ -107,3 +107,62 @@ essa tela é util para confirmar alguns dados de cada usuario especifico, como o
 nesta tela também será possivel escolher a quantia que será depositada, ao clicar no botão "depositar", aparacerá uma mensagem de confirmação do processo.
 
 <img src= "https://user-images.githubusercontent.com/43412432/62232686-314edc80-b39d-11e9-96c6-8414412b5835.png" height="400" width="250" hspace="50">
+
+### Requisitos
+
+para uma inserção dinamica inserida na recyclerview, criei um classe ContactAdapter, responsável pelo gerenciamento de itens que serão inseridos na recyclerview, juntamente com a implementação de um viewHolder que, como o nome sugere, irá segurar uma view dentro do adapter e também será rensposável por reciclar os itens, em uma inserção/exclusão, etc.
+
+```kt
+
+class ContactAdapter(val contacts: MutableList<Contact>): RecyclerView.Adapter<ContactAdapter.ContactViewHolder> (){
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
+        val inflate = LayoutInflater.from(parent.context).inflate(R.layout.contact_item, parent, false)
+        return ContactViewHolder(inflate)
+    }
+
+    override fun getItemCount(): Int = contacts.size
+
+    override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
+        holder.bind(contacts[position])
+    }
+
+    inner class ContactViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        fun bind(contact: Contact) {
+            with(contact){
+                itemView.txt_name_contact.text = name
+            }
+        }
+    }
+}
+
+```
+
+### Funcionamento
+
+- Na primeira tela (activity_contatos), é possivel adicionar um novo contato, ao clicar no fab_button o aplicativo irá executar essa função:
+
+```kt
+
+    private fun addContact() {
+        val unique = Fakeit.getUniqueValue()
+        var new_contact = contact {
+            name = Fakeit.name().firstName()+" "+ Fakeit.name().lastName()
+            bank = Fakeit.bank().name()
+            agency = Fakeit.bank().bankCountryCode()
+            account = Fakeit.bank().ibanDigits()
+            current_account = unique
+            savings_account = !unique
+        }
+        myContacts.add(0,new_contact)
+        var sortedContacts: List<Contact> = myContacts.sortedBy{a -> a.name}
+        var indice = sortedContacts.indexOf(new_contact);
+        adapter.contacts.add(indice, new_contact)
+        adapter.notifyItemInserted(indice)
+    }
+
+```
+
+é possivel verificar 2 estagios integrados, a criação de dados fake atráves da biblioteca Fakeit como já havia mencionado anteriormente, e a inserção do novo contato em meu adapter.
+
+- Na segunda tela (activity_information_contact), é possivel visualizar os dados de cada contato através de um parcelable e por fim acessar os dados do usuario principal para transferir o valor de Usuario.current_ballance -> Contato.current_ballance ou Usuario.saving_ballance -> Contato.saving_ballance, Contato e Usuario são instancias genéricas para cada ligação. na pratica é uma instância que vem de um parcelable Contact e uma instancia de User.
