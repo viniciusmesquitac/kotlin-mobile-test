@@ -34,6 +34,4 @@ class ContactAdapter(val contacts: MutableList<Contact>): RecyclerView.Adapter<C
             }
         }
     }
-
-
 }

@@ -21,7 +21,7 @@ data class Contact(
     val current_account: Boolean,
     val savings_account: Boolean,
     var current_ballance: Float,
-    val savings_ballance: Float
+    var savings_ballance: Float
 ): Parcelable
 
 class ContactBuilder {

@@ -19,18 +19,33 @@ data class User(
     val current_account: Boolean,
     val savings_account: Boolean,
     var current_ballance: Float,
-    val savings_ballance: Float
+    var savings_ballance: Float
 ): Parcelable
 
-fun CreateUser(): User = User(
-    "Vinicius Mesquita",
-    "itau",
-    "001",
-    "550.222.221-444",
-    true,
-    true,
-    100000f,
-    1000f
-)
+
+class MyUser {
+    var name = ""
+    var bank = ""
+    var agency = "001"
+    var account = ""
+    var current_account = false
+    var savings_account = false
+    var current_ballance = 0.0f
+    var savings_ballance = 0.0f
+
+    fun build(): User = User(name,bank,agency,account, false, false, current_ballance, savings_ballance)
+}
+fun user(block: MyUser.() -> Unit): User = MyUser().apply(block).build()
+
+fun CreateUser(): User = user {
+    name = "Vinicius"
+    bank = "itau"
+    agency = "001"
+    account = "50000"
+    current_account = true
+    savings_account = false
+    current_ballance = 10000f
+    savings_ballance = 0f
+}
 
 
