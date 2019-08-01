@@ -81,7 +81,7 @@
             android:layout_alignTop="@id/edit_currency"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:background="@color/design_default_color_primary"
+            android:background="@drawable/rounded_button"
             android:text="@string/transfer"
             android:layout_marginTop="120dp"/>
 

@@ -1,3 +1,10 @@
+/*
+ *
+ *  * 1/8/2019.
+ *  * @Author Vinicius Mesquita
+ *
+ */
+
 package com.example.mobile_test
 
 import android.content.Intent
@@ -16,22 +23,23 @@ class ContactsActivity : AppCompatActivity() {
 
     private lateinit var adapter: ContactAdapter
     private lateinit var myContacts : MutableList<Contact>
-
+    private lateinit var myUser: User;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Fakeit.init()
         setContentView(R.layout.activity_contacts)
 
-        var myUser = CreateUser();
-        val bundle: Bundle? = intent.extras
+        myUser = CreateUser()
+        myContacts = fakeContacts()
 
+        val bundle: Bundle? = intent.extras
         bundle?.apply {
-            var user = getParcelable<User>("user");
+            myUser = getParcelable<User>("user")!!;
         }
 
         adapter = ContactAdapter(fakeContacts())
-        myContacts = fakeContacts()
+
         recycler_view_contacts.adapter = adapter
         recycler_view_contacts.layoutManager = LinearLayoutManager(this)
 
@@ -40,7 +48,6 @@ class ContactsActivity : AppCompatActivity() {
         recycler_view_contacts.addOnItemClickListener(object: OnItemClickListener{
             override fun onItemClicked(position: Int, view: View) {
                 var sortedContacts: List<Contact> = myContacts.sortedBy{a -> a.name}
-
 
                 intent.putExtra("user", myUser);
                 intent.putExtra("contact", sortedContacts[position])
@@ -53,7 +60,6 @@ class ContactsActivity : AppCompatActivity() {
             addContact()
             recycler_view_contacts.scrollToPosition(0)
         }
-
 
     }
 
