@@ -9,19 +9,25 @@ package com.example.mobile_test
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.text.Editable
 import android.util.Log
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.example.mobile_test.model.*
 import kotlinx.android.synthetic.main.activity_information_contact.*
-import java.lang.IllegalArgumentException
+import java.sql.Timestamp
+import java.time.*
+import java.time.ZoneId.systemDefault
+import java.time.LocalTime.MIDNIGHT
+import java.time.temporal.TemporalQueries.localDate
 
+
+
+@RequiresApi(Build.VERSION_CODES.O)
 class InformationContactActivity : AppCompatActivity() {
 
 
@@ -35,7 +41,7 @@ class InformationContactActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         contact = Contact("","","","", false,false,0f,0f)
-        user = User("","","","", false,false,0f,0f)
+        user = User("","","","", false,false,0f,0f,0f,false)
 
 
         val bundle: Bundle? = intent.extras
@@ -86,14 +92,19 @@ class InformationContactActivity : AppCompatActivity() {
         if(user.current_ballance - value!! < 0) {
             message("Você não possui esse valor em conta!")
         } else {
-            user.current_ballance -= value!!
-            contact.current_ballance +=value!!
-            txt_current_balance.text = user.current_ballance.toString();
-            message("Valor de ${value} transferido com sucesso!")
+            if(user.transference_day + value!! > 10000f || user.exceed_transition) { message("você não pode ultrapassar transferncias de R$ 10.000 por dia")} else {
+                user.current_ballance -= value!!
+                user.transference_day = +value!!
+                contact.current_ballance += value!!
 
-            var intent = Intent(this, ContactsActivity::class.java)
-            intent.putExtra("user", user)
-            startActivity(intent)
+                txt_current_balance.text = user.current_ballance.toString();
+                message("Valor de ${value} transferido com sucesso!")
+
+                var intent = Intent(this, ContactsActivity::class.java)
+                intent.putExtra("user", user)
+                startActivity(intent)
+            }
+            checkDay()
         }
 
         Log.d("teste", "Saldo da conta de ${contact.name} agora é de ${contact.current_ballance}")
@@ -105,27 +116,22 @@ class InformationContactActivity : AppCompatActivity() {
         if(user.savings_ballance - value!! < 0) {
             message("Você não possui esse valor em conta!")
         } else {
-            user.savings_ballance -= value!!
-            contact.savings_ballance +=value!!
-            txt_saving_balance.text = user.savings_ballance.toString();
-            message("Valor de ${value} transferido com sucesso!")
+            if(user.transference_day + value!! > 10000f || user.exceed_transition) { message("você não pode ultrapassar transferncias de R$ 10.000 por dia")} else {
+                user.savings_ballance -= value!!
+                user.transference_day +=value;
+                contact.savings_ballance +=value!!
+                txt_saving_balance.text = user.savings_ballance.toString();
+                message("Valor de ${value} transferido com sucesso!")
 
-            var intent = Intent(this, ContactsActivity::class.java)
-            intent.putExtra("user", user)
-            startActivity(intent)
+                var intent = Intent(this, ContactsActivity::class.java)
+                intent.putExtra("user", user)
+                startActivity(intent)
+            }
         }
+        checkDay()
 
         Log.d("teste", "Saldo da conta de ${contact.name} agora é de ${contact.savings_ballance}")
         Log.d("teste",user.savings_ballance.toString())
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
-
-    fun message(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 
     private fun showDialog(){
@@ -146,6 +152,24 @@ class InformationContactActivity : AppCompatActivity() {
         builder.setNegativeButton("CANCELAR",dialogClickListener)
         dialog = builder.create()
         dialog.show()
+    }
+
+    private fun checkDay() {
+        val now = Timestamp(System.currentTimeMillis()).toInstant().toEpochMilli()
+        val midnight = LocalDateTime.of(LocalDate.now(), LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+        if (now > midnight) {
+            user.transference_day = 0f // reset day
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+    fun message(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }
 
