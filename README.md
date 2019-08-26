@@ -166,3 +166,20 @@ class ContactAdapter(val contacts: MutableList<Contact>): RecyclerView.Adapter<C
 é possivel verificar 2 estagios integrados, a criação de dados fake atráves da biblioteca Fakeit como já havia mencionado anteriormente, e a inserção do novo contato em meu adapter.
 
 - Na segunda tela (activity_information_contact), é possivel visualizar os dados de cada contato através de um parcelable e por fim acessar os dados do usuario principal para transferir o valor de Usuario.current_ballance -> Contato.current_ballance ou Usuario.saving_ballance -> Contato.saving_ballance, Contato e Usuario são instancias genéricas para cada ligação. na pratica é uma instância que vem de um parcelable Contact e uma instancia de User.
+
+### Testes de Unidade
+Para realizar os codigos de teste, utilizei um modulo do junit chamado jupiter que é amplamente utilizado para realizar testes dinamicos e simples, não vi necessidade de utilizar testes mais complexos na aplicação.
+
+O meu objetivo nessa etapa foi basicamente atingir 5 tipos de testes que achei essencial:
+
+- verificar se eu consigo adicionar contatos a lista de contatos.
+- verificar se eu consigo transferir e debitar da minha conta valores determinados.
+- verificar se o app impedirá a transferência caso você tente enviar um valor que não está em conta.
+- verificar a lógica de limite diário de transferências de R$10.000 por dia, caso exceda esse limite, o app deverá bloquear as tranferências e aguardar até o próximo dia.
+- verificar se já se passou um dia desde o bloqueio da transferência.
+
+com esses testes posso garantir todos os requisitos solicitados no desafio.
+
+realizei a lógica somente para contas poupança, pois a lógica para contas corrente seria a mesma e não vi necessidade de refazer um mesmo teste.
+
+
