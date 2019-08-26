@@ -21,9 +21,9 @@ import kotlinx.android.synthetic.main.contact_item.*
 
 class ContactsActivity : AppCompatActivity() {
 
-    private lateinit var adapter: ContactAdapter
-    private lateinit var myContacts : MutableList<Contact>
-    private lateinit var myUser: User;
+    lateinit var adapter: ContactAdapter
+    lateinit var myContacts : MutableList<Contact>
+    lateinit var myUser: User;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +63,7 @@ class ContactsActivity : AppCompatActivity() {
 
     }
 
-    private fun addContact() {
+    fun addContact() {
         val unique = Fakeit.getUniqueValue()
         var new_contact = contact {
             name = Fakeit.name().firstName()+" "+ Fakeit.name().lastName()
@@ -78,6 +78,20 @@ class ContactsActivity : AppCompatActivity() {
         var indice = sortedContacts.indexOf(new_contact);
         adapter.contacts.add(indice, new_contact)
         adapter.notifyItemInserted(indice)
+    }
+
+    fun addContact(name: String) {
+        val unique = Fakeit.getUniqueValue()
+        var new_contact = contact {
+            this.name = name
+            this.bank = "itau"
+            this.agency = "01"
+            this.account = "01"
+            this.current_account = true
+            this.savings_account = true
+        }
+        myContacts.add(0,new_contact)
+        var sortedContacts: List<Contact> = myContacts.sortedBy{a -> a.name}
     }
 
     interface OnItemClickListener {

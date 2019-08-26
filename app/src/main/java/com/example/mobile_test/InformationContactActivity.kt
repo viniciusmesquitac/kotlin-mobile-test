@@ -31,8 +31,8 @@ import java.time.temporal.TemporalQueries.localDate
 class InformationContactActivity : AppCompatActivity() {
 
 
-    private lateinit var contact : Contact
-    private lateinit var user: User;
+    lateinit var contact : Contact
+    lateinit var user: User;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +67,7 @@ class InformationContactActivity : AppCompatActivity() {
         }
     }
 
-    private fun applyTransference() {
+    fun applyTransference() {
         if (edit_currency.text.isEmpty()) {
             Toast.makeText(this,"Você deve digitar algum valor!", Toast.LENGTH_SHORT).show()
         } else {
@@ -78,57 +78,69 @@ class InformationContactActivity : AppCompatActivity() {
                 var value: Float? = edit_currency.text.toString().toFloat()
                 val radio: RadioButton = findViewById(id)
                 if(radio.text == "Corrente") {
-                    transferCurrentBalance(value)
+
+                    if(!transferCurrentBalance(value)){
+                        message("Você não possui esse valor em conta!")
+                    } else {
+                        txt_current_balance.text = user.current_ballance.toString();
+                        message("Valor de ${value} transferido com sucesso!")
+
+                        var intent = Intent(this, ContactsActivity::class.java)
+                        intent.putExtra("user", user)
+                        startActivity(intent)
+                    }
                 }
                 if(radio.text == "Poupança") {
-                    transferSavingBalance(value)
+                    if(!transferSavingBalance(value)) {
+                        message("Você não possui esse valor em conta!")
+                    } else {
+                        txt_saving_balance.text = user.savings_ballance.toString();
+                        message("Valor de ${value} transferido com sucesso!")
+
+                        var intent = Intent(this, ContactsActivity::class.java)
+                        intent.putExtra("user", user)
+                        startActivity(intent)
+                    }
                 }
             }
         }
     }
 
-    private fun transferCurrentBalance(value: Float?) {
+    fun transferCurrentBalance(value: Float?):Boolean {
 
         if(user.current_ballance - value!! < 0) {
-            message("Você não possui esse valor em conta!")
+            return false
         } else {
             if(user.transference_day + value!! > 10000f || user.exceed_transition) { message("você não pode ultrapassar transferncias de R$ 10.000 por dia")} else {
                 user.current_ballance -= value!!
                 user.transference_day = +value!!
                 contact.current_ballance += value!!
-
-                txt_current_balance.text = user.current_ballance.toString();
-                message("Valor de ${value} transferido com sucesso!")
-
-                var intent = Intent(this, ContactsActivity::class.java)
-                intent.putExtra("user", user)
-                startActivity(intent)
+                return true
             }
-            checkDay()
         }
+        checkDay()
+        return true
 
         Log.d("teste", "Saldo da conta de ${contact.name} agora é de ${contact.current_ballance}")
         Log.d("teste",user.current_ballance.toString())
     }
 
-    private fun transferSavingBalance(value: Float?) {
+    fun transferSavingBalance(value: Float?):Boolean {
 
         if(user.savings_ballance - value!! < 0) {
-            message("Você não possui esse valor em conta!")
+            return false
         } else {
-            if(user.transference_day + value!! > 10000f || user.exceed_transition) { message("você não pode ultrapassar transferncias de R$ 10.000 por dia")} else {
+            if(user.transference_day + value!! > 10000f || user.exceed_transition) {
+                message("você não pode ultrapassar transferncias de R$ 10.000 por dia")
+            } else {
                 user.savings_ballance -= value!!
                 user.transference_day +=value;
                 contact.savings_ballance +=value!!
-                txt_saving_balance.text = user.savings_ballance.toString();
-                message("Valor de ${value} transferido com sucesso!")
-
-                var intent = Intent(this, ContactsActivity::class.java)
-                intent.putExtra("user", user)
-                startActivity(intent)
+                return true
             }
         }
         checkDay()
+        return true
 
         Log.d("teste", "Saldo da conta de ${contact.name} agora é de ${contact.savings_ballance}")
         Log.d("teste",user.savings_ballance.toString())
@@ -156,6 +168,14 @@ class InformationContactActivity : AppCompatActivity() {
 
     private fun checkDay() {
         val now = Timestamp(System.currentTimeMillis()).toInstant().toEpochMilli()
+        val midnight = LocalDateTime.of(LocalDate.now(), LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+        if (now > midnight) {
+            user.transference_day = 0f // reset day
+        }
+    }
+
+    fun checkDay(now: Long) {
         val midnight = LocalDateTime.of(LocalDate.now(), LocalTime.MAX).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
         if (now > midnight) {

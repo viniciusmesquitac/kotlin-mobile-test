@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mobile_test.model.Contact
 import kotlinx.android.synthetic.main.contact_item.view.*
 
-class ContactAdapter(val contacts: MutableList<Contact>): RecyclerView.Adapter<ContactAdapter.ContactViewHolder> (){
+    class ContactAdapter(val contacts: MutableList<Contact>): RecyclerView.Adapter<ContactAdapter.ContactViewHolder> (){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val inflate = LayoutInflater.from(parent.context).inflate(R.layout.contact_item, parent, false)
