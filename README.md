@@ -170,7 +170,7 @@ class ContactAdapter(val contacts: MutableList<Contact>): RecyclerView.Adapter<C
 ### Testes de Unidade
 Para realizar os codigos de teste, utilizei um modulo do junit chamado jupiter que é amplamente utilizado para realizar testes dinamicos e simples, não vi necessidade de utilizar testes mais complexos na aplicação.
 
-O meu objetivo nessa etapa foi basicamente atingir 5 tipos de testes que achei essencial:
+O meu objetivo nessa etapa foi basicamente atingir 5 funções que julguei serem essenciais:
 
 - verificar se eu consigo adicionar contatos a lista de contatos.
 - verificar se eu consigo transferir e debitar da minha conta valores determinados.
