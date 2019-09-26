@@ -7,6 +7,20 @@ dados fakes de contatos, como nome, numero da conta, nome do banco e etc.
 
 De inicio, é preciso saber as restrições de cada tipo de conta que será atribuida nos *Usuarios* e também estará presente nos seus Contatos,
 
+### Criação das telas
+O aplicativo possui no total 2 telas.
+- **activity_contatos**
+essa activity reune todos os dados no viewHolder da RecyclerView, ainda temos que organizar por nome cada novo contato adicionado. Complicando um pouco do processo de organização das posições e dos dados na recyclerview.
+
+<img src= "https://user-images.githubusercontent.com/43412432/62231771-14190e80-b39b-11e9-8c59-41ae58fb06c8.png" height="400" width="250" hspace="50">
+
+- **activity_information_contact**
+essa tela é util para confirmar alguns dados de cada usuario especifico, como o número da conta e para qual banco esta sendo enviado.
+nesta tela também será possivel escolher a quantia que será depositada, ao clicar no botão "depositar", aparacerá uma mensagem de confirmação do processo.
+
+<img src= "https://user-images.githubusercontent.com/43412432/62232686-314edc80-b39d-11e9-96c6-8414412b5835.png" height="400" width="250" hspace="50">
+
+
 ## **conta corrente**
  - Uma conta corrente é uma inscrição em instituição bancária que dá direito a utilizar-lhe os serviços (p.ex., receber salário, guardar dinheiro,
  emitir cheques,fazer investimentos etc.).
@@ -94,20 +108,6 @@ fun fakeContacts():MutableList<Contact> = mutableListOf(
 )
 
 ```
-
-### Criação das telas
-O aplicativo possui no total 2 telas.
-- **activity_contatos**
-essa activity reune todos os dados no viewHolder da RecyclerView, ainda temos que organizar por nome cada novo contato adicionado. Complicando um pouco do processo de organização das posições e dos dados na recyclerview.
-
-<img src= "https://user-images.githubusercontent.com/43412432/62231771-14190e80-b39b-11e9-8c59-41ae58fb06c8.png" height="400" width="250" hspace="50">
-
-- **activity_information_contact**
-essa tela é util para confirmar alguns dados de cada usuario especifico, como o número da conta e para qual banco esta sendo enviado.
-nesta tela também será possivel escolher a quantia que será depositada, ao clicar no botão "depositar", aparacerá uma mensagem de confirmação do processo.
-
-<img src= "https://user-images.githubusercontent.com/43412432/62232686-314edc80-b39d-11e9-96c6-8414412b5835.png" height="400" width="250" hspace="50">
-
 ### Requisitos
 
 para uma inserção dinamica inserida na recyclerview, criei um classe ContactAdapter, responsável pelo gerenciamento de itens que serão inseridos na recyclerview, juntamente com a implementação de um viewHolder que, como o nome sugere, irá segurar uma view dentro do adapter e também será rensposável por reciclar os itens, em uma inserção/exclusão, etc.
